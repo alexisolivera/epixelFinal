@@ -1,0 +1,30 @@
+h1.seccion {
+    color: black  ;
+	tex
+}
+
+h1.texto {
+	color: blue;
+	text-align: center;
+
+}
+
+div.seccion {
+	text-align: center;
+}
+
+body {
+	background-color: lightblue;
+}
+
+div.noticias {
+	text-align: center;
+	border-style: groove;
+	border-width: 5px;
+	border-color: white;
+}
+
+#boton1 {
+	border-radius: 50%;
+	background-color: white;
+}
