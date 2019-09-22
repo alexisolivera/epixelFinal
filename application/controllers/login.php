@@ -70,14 +70,15 @@ class Login extends CI_Controller {
 			$this->view($data);
 		} else {
 			$email = $_POST['usu_email'];
-			$password = md5($_POST['usu_password']);
+            $password = md5($_POST['usu_password']);
 			//Busca que el usuario tenga una cuenta
 			$resultado = $this->Login_model->checkLogin($email, $password);
 			
 			if(!empty($resultado))
 			{
                 //Se guardan los datos en la sesion
-				$this->guardaDatosEnSesion($resultado, $email);
+                $this->guardaDatosEnSesion($resultado);
+                $data['titulo'] = 'Login';
 				$this->view($data);
 			} 
 			else 
@@ -95,7 +96,7 @@ class Login extends CI_Controller {
 
 	
 
-    public function guardaDatosEnSesion(){
+    public function guardaDatosEnSesion($resultado){
         //Guarda los datos en sesion
         $this->session->set_userdata([
             'apellido' => $resultado['usu_apellido'],
