@@ -1,16 +1,27 @@
-  <body class="text-center" class="login">
-    <form class="form-signin" method="post">
-      <img class="mb-4" src="../../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Iniciar sesion</h1>
-      <label for="inputEmail" class="sr-only">Email</label>
-      <input type="email" id="inputEmail"  name="mail" value="" class="form-control" placeholder="Email address" required autofocus>
-      <label for="inputPassword" class="sr-only">Contraseña</label>
-      <input type="password" id="inputPassword" name="clave" value="" class="form-control" placeholder="Password" required>
-      <!-- mensaje de error enviado por flashdata en el metodo iniciar_sesion_post del controlador usuarios -->
- 		<?php if (false): ?>
- 			<p style="color: red;"> <?php echo $error ?> </p>
- 		<?php endif; ?>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesion</button>
-      <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y"); ?> </p> 
-    </form>
-  </body>
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+<body>
+
+<div id="container">
+	<h1>Welcome to CodeIgniter!</h1>
+
+	<div id="body">
+		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
+
+		<p>If you would like to edit this page you'll find it located at:</p>
+		<code>application/views/welcome_message.php</code>
+
+		<p>The corresponding controller for this page is found at:</p>
+		<code>application/controllers/Welcome.php</code>
+
+		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
+	</div>
+
+	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+</div>
+
+    <button onclick="location.href='<?php echo base_url();?>index.php/login'">Login</button>
+    <button onclick="location.href='<?php echo base_url();?>index.php/registro'">Registrarse</button>
+
+</body>

@@ -1,6 +1,6 @@
 <?php
 
-class Login extends CI_Controller {
+class Registro extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -19,7 +19,7 @@ class Login extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('Login_model');
+        $this->load->model('Registro_model');
         $this->load->helper('url_helper');
         $this->load->library('session');
     }
@@ -28,10 +28,10 @@ class Login extends CI_Controller {
         //Chequear si el ususario esta logueado
         if (!empty($this->session->userdata['apellido']) && !empty($this->session->userdata['nombre']) && !empty($this->session->userdata['id'])) {
             //Si esta logueado que lo redireccione al menu
-            redirect('index.php/', 'refresh');
+            redirect('/menu/', 'refresh');
         } else {
             //Sino esta logueado, redirecciona al login
-            $data['titulo'] = 'Login';
+            $data['titulo'] = 'Registro';
             $this->view($data);
         }
     }
@@ -39,61 +39,62 @@ class Login extends CI_Controller {
     public function view($data) {
 
         //funcion para cargar la vista login
-        $data['titulo'] = 'Login';
+        $data['titulo'] = 'Registro';
         //cargar el formulario de login
         $this->load->helper('form');
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('usu_nombre', 'Nombre', 'required');
+        $this->form_validation->set_rules('usu_apellido', 'Apellido', 'required');
         $this->form_validation->set_rules('usu_email', 'Email', 'required');
         $this->form_validation->set_rules('usu_password', 'Password', 'required');
+        $this->form_validation->set_rules('usu_fecha_nacimiento', 'Fecha de nacimiento', 'required');
+
 
         //cargar la vista propiamente dicha
         $this->load->view('templates/header', $data);
-        $this->load->view('login', $data);
+        $this->load->view('registro', $data);
         $this->load->view('templates/footer', $data);
     }
 
-    public function processLoginInput() {
+    public function registrar_usuario() {
+        if ($this->input->post()) {
 
-        //cargar el formulario de login
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('usu_email', 'Email', 'required');
-        $this->form_validation->set_rules('usu_password', 'Password', 'required');
+            $datos['usu_nombre'] = $this->input->post('usu_nombre');
+            $datos['usu_apellido'] = $this->input->post('usu_apellido');
+            $datos['usu_fecha_nacimiento'] = $this->input->post('usu_fecha_nacimiento');
+            $datos['usu_email'] = $this->input->post('usu_email');
+            $datos['usu_password'] = MD5($this->input->post('usu_password'));
+            $datos['tip_usu_id'] = 1;
+            $datos['usu_estado'] = 1;
 
-        if ($this->form_validation->run() === FALSE) {
-            $data['titulo'] = 'Login';
-            $this->view($data);
-        } else {
-            $email = $_POST['usu_email'];
-            $password = md5($_POST['usu_password']);
-            //Busca que el usuario tenga una cuenta
-            $resultado = $this->Login_model->checkLogin($email, $password);
+            $registro = $this->Registro_model->registrarUsuario($datos);
+            
+            if ($registro) {
 
-            if (!empty($resultado)) {
                 //Guarda los datos en sesion
                 $this->session->set_userdata([
-                    'apellido' => $resultado['usu_apellido'],
-                    'nombre' => $resultado['usu_nombre'],
-                    'email' => $resultado['usu_email'],
-                    'id' => $resultado['usu_id']
+                    'apellido' => $datos['usu_apellido'],
+                    'nombre' => $datos['usu_nombre'],
+                    'email' => $datos['usu_email'],
+                    'id' => $datos['usu_id']
                 ]);
-                
-                $data['titulo'] = 'Login';
-                $this->view($data);
+
+                redirect('index.php/', 'refresh');
             } else {
-                $data['loginError'] = 'No se encontró usuario. Compruebe mail y contraseña';
-                $this->view($data);
+                $data['msj'] = "Ha ocurrido un error al registrarse, por favor intente nuevamente más tarde";
+                redirect('index.php/registro');
             }
         }
     }
 
-    public function logout() {
-        $this->session->sess_destroy();
-        redirect('index.php/login/', 'refresh');
-    }
-
     public function guardaDatosEnSesion($resultado) {
-        
+        //Guarda los datos en sesion
+        $this->session->set_userdata([
+            'apellido' => $resultado['usu_apellido'],
+            'nombre' => $resultado['usu_nombre'],
+            'email' => $resultado['usu_email'],
+            'id' => $resultado['usu_id']
+        ]);
     }
 
 }
