@@ -6,7 +6,7 @@
 			parent::__construct();
 		}
 		// cargo la vista para iniciar sesion
-		public function iniciar_sesion(){
+		public function index(){
 			/*$data = array();
 			$data['error'] = $this->session->flashdata('error');*/
 			$this->load->view('templates/headerLogin');
