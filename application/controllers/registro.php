@@ -67,34 +67,38 @@ class Registro extends CI_Controller {
             $datos['tip_usu_id'] = 1;
             $datos['usu_estado'] = 1;
 
-            $registro = $this->Registro_model->registrarUsuario($datos);
-            
-            if ($registro) {
-
-                //Guarda los datos en sesion
-                $this->session->set_userdata([
-                    'apellido' => $datos['usu_apellido'],
-                    'nombre' => $datos['usu_nombre'],
-                    'email' => $datos['usu_email'],
-                    'id' => $datos['usu_id']
-                ]);
-
-                redirect('index.php/', 'refresh');
-            } else {
-                $data['msj'] = "Ha ocurrido un error al registrarse, por favor intente nuevamente más tarde";
-                redirect('index.php/registro');
+            if(!$this->Registro_model->existeEmail($datos['usu_email'])){
+                
+                $registro = $this->Registro_model->registrarUsuario($datos);
+                
+                if ($registro) {
+                    //Guarda los datos en sesion
+                    $this->session->set_userdata([
+                        'apellido' => $datos['usu_apellido'],
+                        'nombre' => $datos['usu_nombre'],
+                        'email' => $datos['usu_email'],
+                        'id' => $datos['usu_id']
+                    ]);
+                    
+                    $redirect = 'index.php/';
+                }else{
+                    $msj = 'Ha ocurrido un error al registrarse, por favor intente nuevamente más tarde';
+                    $redirect = 'index.php/registro';
+                }
+            }else{
+                $msj = '¡Lo sentimos! El email se encuentra registrado.';
+                $redirect = 'index.php/registro';
             }
+             
+            $data['msj'] = $msj;
+            redirect($redirect);
+            
         }
     }
 
-    public function guardaDatosEnSesion($resultado) {
-        //Guarda los datos en sesion
-        $this->session->set_userdata([
-            'apellido' => $resultado['usu_apellido'],
-            'nombre' => $resultado['usu_nombre'],
-            'email' => $resultado['usu_email'],
-            'id' => $resultado['usu_id']
-        ]);
+    public function existeEmail($email) {
+        
+        
     }
 
 }

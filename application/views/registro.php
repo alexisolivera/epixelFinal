@@ -18,7 +18,7 @@
       <input type="password" name="usu_password" value="1234"/><br />
       <input type="submit" name="submit" value="Registrarse" class="normal-button"/>
     </form>
-    
+    <button onclick="location.href='<?php echo base_url();?>index.php/login'">¿Ya tienes cuenta? Haz click aquí para iniciar sesión</button>
     <?php if(isset($registroError)) {echo "$registroError";} ?>
   </div>
 </div>
